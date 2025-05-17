@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="lt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NT mokesčio skaičiuoklė</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="min-h-screen bg-slate-100 py-6 font-sans">
+    <div class="max-w-md mx-auto bg-white border border-gray-200 rounded-3xl shadow-2xl p-6">
+      <h1 class="text-xl font-extrabold text-center mb-2">Preliminari NT mokesčio skaičiuoklė</h1>
+      <p class="text-xs text-center text-gray-600 mb-6">Skaičiuoklę parengė Seimo nariai: Vitalijus Šeršniovas, Viktoras Fiodorovas, Vytautas Sinica, Artūras Zuokas</p>
+
+      <!-- PAGRINDINIS BŪSTAS -->
+      <h2 class="font-semibold text-sm mb-2">Pagrindinis būstas</h2>
+      <label class="block text-sm mb-1">Pagrindinio būsto turto vertė (€)</label>
+      <input id="primaryValue" type="number" class="w-full border rounded-md p-2 mb-3" />
+
+      <label class="block text-sm mb-1">Neapmokestinamoji riba (€)</label>
+      <input id="primaryCap" type="number" class="w-full border rounded-md p-2 mb-3" />
+
+      <label class="block text-sm mb-1">Taikomas mokesčio tarifas (%) (0,1–1%)</label>
+      <input id="primaryRate" type="number" step="0.01" class="w-full border rounded-md p-2 mb-3" />
+
+      <label class="inline-flex items-center mb-2">
+        <input id="credit75" type="checkbox" class="mr-2" />
+        <span class="text-sm">3+ vaikai arba vaikas su negalia (75 % kreditas)</span>
+      </label>
+
+      <p class="text-xs text-blue-700 mb-6" id="primaryResult">Preliminarus pagrindinio būsto mokestis: 0,00 €</p>
+
+      <hr class="my-4" />
+
+      <!-- Kitas turtas -->
+      <h2 class="font-semibold text-sm mb-2 text-red-700">Nepagrindinis / kitas turtas</h2>
+      <label class="block text-sm mb-1">Turto vertė (€)</label>
+      <input id="otherValue" type="number" class="w-full border rounded-md p-2 mb-3" />
+
+      <label class="inline-flex items-center mb-1">
+        <input id="abandoned" type="checkbox" class="mr-2" />
+        <span class="text-sm text-red-700">Apleistas / neprižiūrimas turtas (4 %)</span>
+      </label>
+      <label class="inline-flex items-center mb-3">
+        <input id="extra02" type="checkbox" class="mr-2" />
+        <span class="text-sm text-red-700">+0,2 % tikslinis tarifas (komerciniam turtui)</span>
+      </label>
+
+      <p class="text-xs text-red-700 mb-6" id="otherResult">Preliminarus kito turto mokestis: 0,00 €</p>
+
+      <h3 class="text-center font-bold mb-4" id="totalResult">Iš viso: 0,00 €</h3>
+
+      <p class="text-[10px] text-gray-500 text-center">Skaičiavimas remiasi užregistruoto projekto duomenimis ir preliminariais tarifais. Faktinę mokesčio sumą nustatys jūsų savivaldybė.</p>
+    </div>
+
+    <script>
+      const CAP_LIMIT = 450000;
+
+      // Element refs
+      const primaryValue = document.getElementById("primaryValue");
+      const primaryCap = document.getElementById("primaryCap");
+      const primaryRate = document.getElementById("primaryRate");
+      const credit75 = document.getElementById("credit75");
+      const abandoned = document.getElementById("abandoned");
+      const extra02 = document.getElementById("extra02");
+
+      const primaryResult = document.getElementById("primaryResult");
+      const otherValue = document.getElementById("otherValue");
+      const otherResult = document.getElementById("otherResult");
+      const totalResult = document.getElementById("totalResult");
+
+      // Add listeners
+      [primaryValue, primaryCap, primaryRate, credit75, abandoned, extra02, otherValue].forEach(el => el.addEventListener("input", recalc));
+
+      function fmt(n) {
+        return n.toLocaleString("lt-LT", { style: "currency", currency: "EUR", minimumFractionDigits: 2 });
+      }
+
+      function calcPrimary() {
+        const val = parseFloat(primaryValue.value) || 0;
+        const cap = parseFloat(primaryCap.value) || 0;
+        const rate = (parseFloat(primaryRate.value) || 0) / 100;
+        const taxable = Math.max(val - cap, 0);
+
+        // Kreditui taikoma tik daliai ≤ CAP_LIMIT
+        const part1 = Math.min(taxable, CAP_LIMIT);
+        const part2 = Math.max(taxable - CAP_LIMIT, 0);
+
+        let tax1 = part1 * rate;
+        if (credit75.checked) tax1 *= 0.25; // 75 % nuolaida
+        else tax1 *= 0.5; // 50 % bazinis kreditas
+
+        let tax = tax1 + part2 * rate;
+        if (tax <= 5) tax = 0;
+        return tax;
+      }
+
+      function progressiveRate(amount) {
+        if (amount <= 20000) return 0;
+        if (amount <= 200000) return 0.001;
+        if (amount <= 400000) return 0.002;
+        if (amount <= 600000) return 0.005;
+        return 0.01;
+      }
+
+      function calcOther() {
+        let val = parseFloat(otherValue.value) || 0;
+        if (val === 0) return 0;
+
+        let rate = abandoned.checked ? 0.04 : progressiveRate(val);
+        if (extra02.checked) rate += 0.002;
+        return val * rate;
+      }
+
+      function recalc() {
+        const p = calcPrimary();
+        const o = calcOther();
+
+        primaryResult.textContent = `Preliminarus pagrindinio būsto mokestis: ${fmt(p)}`;
+        otherResult.textContent = `Preliminarus kito turto mokestis: ${fmt(o)}`;
+        totalResult.textContent = `Iš viso: ${fmt(p + o)}`;
+      }
+    </script>
+  </body>
+</html>
