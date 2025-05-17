@@ -8,117 +8,117 @@
   </head>
   <body class="min-h-screen bg-slate-100 py-6 font-sans">
     <div class="max-w-md mx-auto bg-white border border-gray-200 rounded-3xl shadow-2xl p-6">
-      <h1 class="text-xl font-extrabold text-center mb-2">Preliminari NT mokesčio skaičiuoklė</h1>
-      <p class="text-xs text-center text-gray-600 mb-6">Skaičiuoklę parengė Seimo nariai: Vitalijus Šeršniovas, Viktoras Fiodorovas, Vytautas Sinica, Artūras Zuokas</p>
+      <h1 class="text-center text-2xl font-bold mb-1">Preliminari NT mokesčio skaičiuoklė</h1>
+      <p class="text-center text-sm text-gray-600 mb-6">Skaičiuoklę parengė Seimo nariai: Vitalijus Šeršniovas, Viktoras Fiodorovas, Vytautas Sinica, Artūras Zuokas</p>
 
       <!-- PAGRINDINIS BŪSTAS -->
-      <h2 class="font-semibold text-sm mb-2">Pagrindinis būstas</h2>
-      <label class="block text-sm mb-1">Pagrindinio būsto turto vertė (€)</label>
-      <input id="primaryValue" type="number" class="w-full border rounded-md p-2 mb-3" />
+      <h2 class="font-semibold mb-3 text-lg">Pagrindinis būstas</h2>
 
-      <label class="block text-sm mb-1">Neapmokestinamoji riba (€)</label>
-      <input id="primaryCap" type="number" class="w-full border rounded-md p-2 mb-3" />
+      <label class="block text-sm font-medium text-gray-700 mb-1">Pagrindinio būsto turto vertė (€)</label>
+      <input id="pbVertė" type="number" class="w-full mb-4 rounded-lg border-2 border-blue-400 bg-blue-50 p-2 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500" />
 
-      <label class="block text-sm mb-1">Taikomas mokesčio tarifas (%) (0,1–1%)</label>
-      <input id="primaryRate" type="number" step="0.01" class="w-full border rounded-md p-2 mb-3" />
+      <label class="block text-sm font-medium text-gray-700 mb-1">Neapmokestinamoji riba (€)</label>
+      <small class="block text-xs text-gray-500 mb-1">(Nustato savivaldybės taryba)</small>
+      <input id="pbRiba" type="number" class="w-full mb-4 rounded-lg border-2 border-blue-400 bg-blue-50 p-2 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500" />
 
-      <label class="inline-flex items-center mb-2">
-        <input id="credit75" type="checkbox" class="mr-2" />
-        <span class="text-sm">3+ vaikai arba vaikas su negalia (75 % kreditas)</span>
-      </label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Taikomas mokesčio tarifas (%) <span class="text-gray-500">(0,1–1 %)</span></label>
+      <small class="block text-xs text-gray-500 mb-1">(Nustato savivaldybės taryba)</small>
+      <input id="pbTarifas" type="number" step="0.01" class="w-full mb-2 rounded-lg border-2 border-blue-400 bg-blue-50 p-2 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-500" />
 
-      <p class="text-xs text-blue-700 mb-6" id="primaryResult">Preliminarus pagrindinio būsto mokestis: 0,00 €</p>
+      <div class="flex items-center mb-4">
+        <input id="kreditas75" type="checkbox" class="mr-2" />
+        <label for="kreditas75" class="text-sm">3+ vaikai arba vaikas su negalia (75 % kreditas)</label>
+      </div>
+
+      <p class="text-sm mb-6 bg-blue-100 rounded-md px-2 py-1">Preliminarus pagrindinio būsto mokestis: <span id="pbMokestis" class="font-semibold text-blue-800">0,00 €</span></p>
 
       <hr class="my-4" />
 
-      <!-- Kitas turtas -->
-      <h2 class="font-semibold text-sm mb-2 text-red-700">Nepagrindinis / kitas turtas</h2>
-      <label class="block text-sm mb-1">Turto vertė (€)</label>
-      <input id="otherValue" type="number" class="w-full border rounded-md p-2 mb-3" />
+      <!-- NEPAGRINDINIS -->
+      <h2 class="font-semibold mb-3 text-lg text-red-700">Nepagrindinis / kitas turtas</h2>
 
-      <label class="inline-flex items-center mb-1">
-        <input id="abandoned" type="checkbox" class="mr-2" />
-        <span class="text-sm text-red-700">Apleistas / neprižiūrimas turtas (4 %)</span>
-      </label>
-      <label class="inline-flex items-center mb-3">
-        <input id="extra02" type="checkbox" class="mr-2" />
-        <span class="text-sm text-red-700">+0,2 % tikslinis tarifas (komerciniam turtui)</span>
-      </label>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Turto vertė (€)</label>
+      <input id="nbVertė" type="number" class="w-full mb-4 rounded-lg border-2 border-red-400 bg-red-50 p-2 focus:bg-white focus:border-red-600 focus:ring-2 focus:ring-red-500" />
 
-      <p class="text-xs text-red-700 mb-6" id="otherResult">Preliminarus kito turto mokestis: 0,00 €</p>
+      <div class="flex items-center mb-2">
+        <input id="apleistas" type="checkbox" class="mr-2" />
+        <label for="apleistas" class="text-sm">Apleistas / neprižiūrimas turtas (4 %)</label>
+      </div>
+      <div class="flex items-center mb-4">
+        <input id="tikslinis02" type="checkbox" class="mr-2" />
+        <label for="tikslinis02" class="text-sm">+0,2 % tikslinis tarifas (komerciniam turtui)</label>
+      </div>
 
-      <h3 class="text-center font-bold mb-4" id="totalResult">Iš viso: 0,00 €</h3>
+      <p class="text-sm mb-6 bg-red-100 rounded-md px-2 py-1">Preliminarus kito turto mokestis: <span id="nbMokestis" class="font-semibold text-red-800">0,00 €</span></p>
 
-      <p class="text-[10px] text-gray-500 text-center">Skaičiavimas remiasi užregistruoto projekto duomenimis ir preliminariais tarifais. Faktinę mokesčio sumą nustatys jūsų savivaldybė.</p>
+      <h2 class="text-center text-lg font-bold mb-4">Iš viso: <span id="viso">0,00 €</span></h2>
+
+      <p class="text-center text-xs text-gray-500">Skaičiavimas remiasi užregistruoto projekto duomenimis ir preliminariais tarifais. Faktinę mokesčio sumą nustatys Jūsų savivaldybė.</p>
     </div>
 
     <script>
-      const CAP_LIMIT = 450000;
+      const pbVertė = document.getElementById('pbVertė');
+      const pbRiba = document.getElementById('pbRiba');
+      const pbTarifas = document.getElementById('pbTarifas');
+      const kreditas75 = document.getElementById('kreditas75');
+      const pbMokestis = document.getElementById('pbMokestis');
 
-      // Element refs
-      const primaryValue = document.getElementById("primaryValue");
-      const primaryCap = document.getElementById("primaryCap");
-      const primaryRate = document.getElementById("primaryRate");
-      const credit75 = document.getElementById("credit75");
-      const abandoned = document.getElementById("abandoned");
-      const extra02 = document.getElementById("extra02");
+      const nbVertė = document.getElementById('nbVertė');
+      const apleistas = document.getElementById('apleistas');
+      const tikslinis02 = document.getElementById('tikslinis02');
+      const nbMokestis = document.getElementById('nbMokestis');
 
-      const primaryResult = document.getElementById("primaryResult");
-      const otherValue = document.getElementById("otherValue");
-      const otherResult = document.getElementById("otherResult");
-      const totalResult = document.getElementById("totalResult");
+      const viso = document.getElementById('viso');
 
-      // Add listeners
-      [primaryValue, primaryCap, primaryRate, credit75, abandoned, extra02, otherValue].forEach(el => el.addEventListener("input", recalc));
-
-      function fmt(n) {
-        return n.toLocaleString("lt-LT", { style: "currency", currency: "EUR", minimumFractionDigits: 2 });
-      }
+      const CAP = 450000;
 
       function calcPrimary() {
-        const val = parseFloat(primaryValue.value) || 0;
-        const cap = parseFloat(primaryCap.value) || 0;
-        const rate = (parseFloat(primaryRate.value) || 0) / 100;
-        const taxable = Math.max(val - cap, 0);
-
-        // Kreditui taikoma tik daliai ≤ CAP_LIMIT
-        const part1 = Math.min(taxable, CAP_LIMIT);
-        const part2 = Math.max(taxable - CAP_LIMIT, 0);
-
-        let tax1 = part1 * rate;
-        if (credit75.checked) tax1 *= 0.25; // 75 % nuolaida
-        else tax1 *= 0.5; // 50 % bazinis kreditas
-
-        let tax = tax1 + part2 * rate;
-        if (tax <= 5) tax = 0;
-        return tax;
+        const v = parseFloat(pbVertė.value) || 0;
+        const riba = parseFloat(pbRiba.value) || 0;
+        const tarifa = parseFloat(pbTarifas.value) || 0;
+        const apmVertė = Math.max(v - riba, 0);
+        const dalisNuolaida = Math.min(apmVertė, CAP);
+        const likutis = Math.max(apmVertė - CAP, 0);
+        const bazė = (dalisNuolaida * tarifa) / 100;
+        const kreditas = kreditas75.checked ? 0.75 : 0.5;
+        const m1 = bazė * (1 - kreditas);
+        const m2 = (likutis * tarifa) / 100;
+        const suma = m1 + m2;
+        pbMokestis.textContent = suma <= 5 ? '0,00 €' : suma.toFixed(2) + ' €';
+        return suma <= 5 ? 0 : suma;
       }
 
-      function progressiveRate(amount) {
-        if (amount <= 20000) return 0;
-        if (amount <= 200000) return 0.001;
-        if (amount <= 400000) return 0.002;
-        if (amount <= 600000) return 0.005;
-        return 0.01;
+      function progresinisTarifas(v) {
+        if (v <= 20000) return 0;
+        if (v <= 200000) return 0.1;
+        if (v <= 400000) return 0.2;
+        if (v <= 600000) return 0.5;
+        return 1;
       }
 
       function calcOther() {
-        let val = parseFloat(otherValue.value) || 0;
-        if (val === 0) return 0;
-
-        let rate = abandoned.checked ? 0.04 : progressiveRate(val);
-        if (extra02.checked) rate += 0.002;
-        return val * rate;
+        const v = parseFloat(nbVertė.value) || 0;
+        if (v === 0) {
+          nbMokestis.textContent = '0,00 €';
+          return 0;
+        }
+        let tarifas = apleistas.checked ? 4 : progresinisTarifas(v);
+        if (tikslinis02.checked && !apleistas.checked) tarifas += 0.2;
+        let mokestis = (v * tarifas) / 100;
+        nbMokestis.textContent = mokestis.toFixed(2) + ' €';
+        return mokestis;
       }
 
       function recalc() {
-        const p = calcPrimary();
-        const o = calcOther();
-
-        primaryResult.textContent = `Preliminarus pagrindinio būsto mokestis: ${fmt(p)}`;
-        otherResult.textContent = `Preliminarus kito turto mokestis: ${fmt(o)}`;
-        totalResult.textContent = `Iš viso: ${fmt(p + o)}`;
+        const m1 = calcPrimary();
+        const m2 = calcOther();
+        const suma = m1 + m2;
+        viso.textContent = suma.toFixed(2) + ' €';
       }
+
+      ['input', 'change'].forEach(evt => {
+        document.addEventListener(evt, recalc);
+      });
     </script>
   </body>
 </html>
